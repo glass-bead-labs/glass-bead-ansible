@@ -1,0 +1,8 @@
+- hosts: all
+  tasks:
+
+      - name: APT packages
+        apt: pkg={{ item }} state=latest
+        with_items:
+            - libopenblas-base
+            - libopenblas-dev

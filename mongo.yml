@@ -1,17 +1,29 @@
+---
 - hosts: all
+  remote_user: dav
+  sudo: yes
+  vars_files:
+      - ./passwords.yml
+
   tasks:
     - name: APT packages
-        apt: pkg={{ item }} state=latest
-        with_items:
-            - mongodb
-            - python-pymongo
+      apt: name={{ item }} state=latest
+      with_items:
+        - mongodb
+        - python-pymongo
+
+    # May need to ensure that mongo is running first
+    # Also definitely need to enable auth, and also ip_bind on mercury's public
+    # facing IP address
 
     - mongodb_user: database=admin name=Xadmin
-        password={{ adm_pass }}
+        password="{{ adm_pass }}"
         roles='userAdminAnyDatabase' state=present
     - mongodb_user: database=dataConnector name=DCuser
-        password={{ dcu_pass }}
+        password="{{ dcu_pass }}"
         roles='read' state=present
     - mongodb_user: database=dataConnector name=DCwriter
-        password={{ dcw_pass }}
+        password="{{ dcw_pass }}"
         roles='readWrite' state=present
+
+
