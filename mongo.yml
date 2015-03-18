@@ -1,0 +1,17 @@
+- hosts: all
+  tasks:
+    - name: APT packages
+        apt: pkg={{ item }} state=latest
+        with_items:
+            - mongodb
+            - python-pymongo
+
+    - mongodb_user: database=admin name=Xadmin
+        password={{ adm_pass }}
+        roles='userAdminAnyDatabase' state=present
+    - mongodb_user: database=dataConnector name=DCuser
+        password={{ dcu_pass }}
+        roles='read' state=present
+    - mongodb_user: database=dataConnector name=DCwriter
+        password={{ dcw_pass }}
+        roles='readWrite' state=present
